@@ -24,31 +24,31 @@ with open("data/index.html", encoding="UTF-8") as file:
 
     soup = BeautifulSoup(src, "lxml")
     count = 0
-    lst = [[], [], [], [], [], []]
     get_headers = soup.find_all("nav", class_='Footer_footerNav__adqqs')
+    lst = [[], [], [], [], [], []]
     for item in get_headers:
-        if count < 100:
-            get_names_h3 = item.find("h3")
-            if get_names_h3:
-                print(get_names_h3.text, end='\n\n')
-                lst[count].append(get_names_h3.text)
+        get_names_h3 = item.find("h3")
+        if get_names_h3:
+            print(get_names_h3.text, end='\n\n')
+            lst[count].append(get_names_h3.text)
 
-                get_names_reg = item.find('div', class_='Footer_footerNav__hide__16BaK').find_all('div', class_='Footer_footerNav__linkWrap__15BBL')
-                for item_2 in get_names_reg:
+            get_names_reg = item.find('div', class_='Footer_footerNav__hide__16BaK').find_all('div', class_='Footer_footerNav__linkWrap__15BBL')
+            for item_2 in get_names_reg:
 
-                    get_links = item_2.find("a")
-                    x = f'{get_links.text}: {get_links.get("href")}'
-                    lst[count].append(get_links.text)
-                    if get_names_reg.index(item_2) == (len(get_names_reg)-1):
-                        print(x, end='\n\n')
-                    else:
-                        print(x)
+                get_links = item_2.find("a")
+                x = f'{get_links.text}: {get_links.get("href")}'
+                lst[count].append(get_links.text)
+                if get_names_reg.index(item_2) == (len(get_names_reg)-1):
+                    print(x, end='\n\n')
+                else:
+                    print(x)
 
-        if count != len(lst) - 1:
-            count += 1
+            if count != len(lst) - 1:
+                count += 1
+        else:
+            lst.pop()
 
     print(lst)
-
     for i in lst:
         with open('data/list.csv', 'a', newline='', encoding='UTF-8') as file:
             writer = csv.writer(file)

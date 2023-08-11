@@ -1,3 +1,5 @@
+import base64
+
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -25,7 +27,7 @@ with open("data/index.html", encoding="UTF-8") as file:
     soup = BeautifulSoup(src, "lxml")
     count = 0
     get_headers = soup.find_all("nav", class_='Footer_footerNav__adqqs')
-    lst = [[], [], [], [], [], []]
+    lst = [[] for _ in range(len(get_headers))]
     for item in get_headers:
         get_names_h3 = item.find("h3")
         if get_names_h3:
@@ -49,18 +51,22 @@ with open("data/index.html", encoding="UTF-8") as file:
             lst.pop()
 
     print(lst)
-    for i in lst:
-        with open('data/list.csv', 'a', newline='', encoding='UTF-8') as file:
-            writer = csv.writer(file)
-            writer.writerow(
 
-                    i,
 
-            )
+    #запись в csv-таблицу
+    # for i in lst:
+    #     with open('data/list.csv', 'a', newline='', encoding='UTF-8') as file:
+    #         writer = csv.writer(file)
+    #         writer.writerow(
+    #
+    #                 i,
+    #
+    #         )
 
-    # get_names = soup.find_all("div", class_='Footer_footerNav')
-    # for item in get_headers:
-    #     get_names_2 = item.find_all("div", class_='Footer_footerNav')
-    #     for item_2 in get_names_2:
-    #         get_names_3 = item_2.find("a")
-    #         print(get_names_3)
+    #сохраняем лого сайта
+    get_pic = soup.find('img', class_='pc_logo').get('src')
+    get_pic_str = str(get_pic)
+    base64_data = get_pic_str.split(',')[1]
+    decoded_data = base64.b64decode(base64_data)
+    with open('data/pic.svg', 'wb') as f:
+        f.write(decoded_data)
